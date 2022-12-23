@@ -17,6 +17,7 @@ export default function Register() {
     const handleOnChange = () => {
         setIsChecked(!isChecked);
     };
+
     const handleRegister= async (e)=>{
         e.preventDefault();
         if(passwordAgain.current.value !== password.current.value) {
@@ -41,7 +42,7 @@ export default function Register() {
 
     return (
         <div className="register">
-            <Button className="regLogoBox" href="/">ConnectUCLA</Button>
+            <Button className="regLogoBox" href="/home">ConnectUCLA</Button>
             <form className="regBox" onSubmit={handleRegister}>
                 <input 
                     className="regInput" 
@@ -86,13 +87,16 @@ export default function Register() {
                     required
                 />
 
-                <button className="regButton" 
-                type="submit">Register</button>
+                <button 
+                    className="regButton"
+                    type="submit">
+                    Register
+                </button>
 
                 <Link className="registerLoginButton" to="/login">
                     <button 
                         className="registerLoginButton">
-                        Go to login
+                        Log in
                     </button>
                 </Link>
             </form>

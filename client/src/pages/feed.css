@@ -1,0 +1,31 @@
+.feed {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    flex-wrap: wrap;
+
+}
+
+.feed .feedTop {
+    margin-top: 5vw;
+    margin-left: 10vw;
+    max-width: 80%;
+    border-bottom-color: gold;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    background-color: '#8bb8e880';
+    border-bottom: 2.5;
+    border-color: 'gold';
+    /* max-height: 200px;   */
+ }
+
+.feed .feedBottom {
+    margin-top: 5vw;
+    margin-left: 10vw;
+    max-width: 80%;
+}
+
+

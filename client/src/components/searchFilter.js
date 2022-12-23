@@ -52,6 +52,7 @@ export default function FilterBar(props){
             //     left: '10px'
             // }}
             >
+            
             <TextField 
             id="outlined-basic" 
             // label="Tags" 

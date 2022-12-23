@@ -5,7 +5,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 
-
 export default function SearchButton(props) {
     const [text, setText] = React.useState("")
 
@@ -18,15 +17,7 @@ export default function SearchButton(props) {
       };
 
     return (
-        <TextField 
-      //   style= {{
-      //     position: 'absolute',
-      //     height: '30px',
-      //     width: '200px',
-      //     top: '170px',
-      //     left: '10px'
-
-      // }}
+      <TextField 
             id="outlined-basic" 
             label="Search" 
             variant="outlined" 
@@ -41,6 +32,6 @@ export default function SearchButton(props) {
             value={text}
             onKeyDown={(e) => handleInput(e)}
             onChange={(e) => setText(e.target.value)}
-            />
+       />
     )
-} 
+}

@@ -20,7 +20,7 @@ First and foremost, Node.js is required. It can be downlaoded from here: https:/
 After cloning the repository, packages and their dependencies should be installed.
 
 To do this, in your CLI navigate to the server and
-react-connectucla directories (separately) and run:
+client directories (separately) and run:
 npm install
 
 > Expect warnings and vulnerabilities for the client (react-connectucla).  

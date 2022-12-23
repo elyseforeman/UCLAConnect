@@ -16,7 +16,12 @@ import IconButton from '@mui/material/IconButton';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import GroupIcon from '@mui/icons-material/Group';
+import StandardFeed from '../components/profile-feed/standard-feed'
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 // Homepage doubles as the feed.
+
 
 export default function Feed() {
     // Variables + hooks
@@ -25,10 +30,17 @@ export default function Feed() {
     const [rsvpList, setRSVPList] = useState(null);
     const {user} = useContext(AuthContext);
     const [indexSearch, setIndexSearch] = useState(false)
-    const [swapFeed, setSwapFeed] = useState(false);
+    const [seeFollowing, setSeeFollowing] = useState(false);
+
+    // TABS CONTROL //
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+      };
+    const [value, setValue] = React.useState(0);
+   
     //toggle feed
-    const handleSwap = () => {
-        setSwapFeed(swapFeed ? false : true);
+    const toggleFollowing = () => {
+        setSeeFollowing(seeFollowing ? false : true);
     };
 
     // Do on render
@@ -39,7 +51,7 @@ export default function Feed() {
         } else {
             setRSVPList([]);
         }
-    }, [tags, swapFeed, user, indexSearch]);
+    }, [tags, seeFollowing, user, indexSearch]);
     
     // Get list of RSVP'ed post for user
     const retrieveRSVPList = () => {
@@ -98,95 +110,35 @@ export default function Feed() {
 
 
     return (
-        <div >
+        <div className="feed"> 
             <NavBar></NavBar>
-            <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    // marginTop: 2,
-                    marginBottom: 2,
-                    alignItems:'center',
-                    backgroundColor: '#8bb8e880',
-                    borderBottom: 2.5, 
-                    borderColor: 'gold',
-                }}>
-                <Box sx={{
-                    marginBottom: 4,
-                    marginTop: 2,
-                    marginLeft: 1.5,
-                    maxHeight: '100px',
-                }}>
-
-                <SearchField 
-                    setIndex={setIndexSearch} 
-                    handleIndexChange={handleIndexSearch}
-                ></SearchField>
-
+            <div className='feedTop'>
+                <SearchField setIndex={setIndexSearch} handleIndexChange={handleIndexSearch}></SearchField>
                 <FilterBar handleTagChange={(tags) => handleTagChange(tags)}></FilterBar>
-                    
+
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="icon position tabs example"
+                >
+                    <Tab label="All"/> 
+                    {user && <Tab label="For You" href="/home"/>}
+                    {user && <Tab icon={<GroupIcon />} iconPosition="start" label="Following" onClick={toggleFollowing}/>}
+                    <Tab label="Today"/> 
+                    <Tab label="Clubs"/>
+                    <Tab label="Sports"/>
+                    <Tab label="Academic"/>
+                </Tabs>
+            </div>
+            <div className='feedBottom'>
+                <Box sx={{display: 'flex', flexDirection:'column', alignItems:'left'}}>
+                    <Typography variant="h3">Trending Events</Typography>
+                    {user && seeFollowing && <FollowFeed username={user.username}/>}
+                    {!seeFollowing && <StandardFeed Posts={posts} RSVPList={rsvpList}></StandardFeed>}
                 </Box>
-                {user && swapFeed && 
-                <IconButton 
-                    aria-label="Return to Home Timeline"
-                    onClick={handleSwap}>
-                <HomeOutlinedIcon />
-
-
-
-                </IconButton>}
-                {user && !swapFeed &&
-                <IconButton 
-                    aria-label="Switch to Following Timeline"
-                    onClick={handleSwap}>
-                    <GroupIcon /> 
-                </IconButton>}
-            </Box>
-
-
-        {/* <div className="feedBottom"> */}
-
-{/*   
-                <SearchField 
-                    setIndex={setIndexSearch} 
-                    handleIndexChange={handleIndexSearch}
-                ></SearchField>
-
-                <FilterBar handleTagChange={(tags) => handleTagChange(tags)}></FilterBar> */}
-            {/* </Box> */}
-
-            <Box sx={{display: 'flex', flexDirection:'column', alignItems:'center'}}>
-            {user && swapFeed && <FollowFeed username={user.username}/>}
-            </Box>
-            {!swapFeed && 
-            <Box sx={{ flexGrow: 1 }}>
-            <Grid container justifyContent="center">
-            <Grid item container spacing={3} xs={8}>
-                {posts.map(post => 
-                    {
-                    return (
-                        <Grid item md={4} key={post._id}>
-                            <Card 
-                                link={post._id}
-                                userId={post.userId}
-                                image={post.imgurl} 
-                                title={post.title}
-                                content={post.content} //add event stuff, event.title? etc
-                                startTime={post.startTime}
-                                endTime={post.endTime}
-                                location={post.location}
-                                tags={post.tags}
-                                organizer={post.author}
-                                RSVP_List={rsvpList}
-                            />
-                        </Grid>
-                        )
-                    })
-                }
-            </Grid>
-            </Grid>
-            </Box>}
+            </div>
         </div>
-        // </div>
     )
 }
+
 

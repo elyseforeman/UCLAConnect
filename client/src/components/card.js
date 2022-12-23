@@ -63,7 +63,7 @@ export default function ImgMediaCard(props) {
   useEffect(() => {
       const retrieveUser = async () => {
           const res = await UserAPI.getUserById(props.userId);
-          setPostUser(res.data.username)
+          setPostUser(res.data)
       };
       retrieveUser();
   }, [props, user, expanded]);
@@ -101,9 +101,11 @@ export default function ImgMediaCard(props) {
         
         <Box sx={{marginLeft: 1,}}>
           {postUser && 
-            <Link to={"/profile/"+`${postUser}`}>
-              <Avatar sx={{ bgcolor: '#064270' }}>{postUser.charAt(0)}</Avatar>
-            </Link>} 
+            <Link to={"/profile/"+`${postUser.username}`}>
+              {postUser.profilePicture ? 
+                <Avatar src={postUser.profilePicture} title={postUser.username}></Avatar> :
+                <Avatar sx={{ bgcolor: '#064270' }} title={postUser.username}>{postUser.username.charAt(0)}</Avatar> }
+            </Link>}
         </Box>
         <ExpandMore
           expand={expanded}

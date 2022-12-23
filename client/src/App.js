@@ -1,7 +1,7 @@
 import Feed from "./pages/feed.js"
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import Home from "./pages/home.js"
+import Home from "./pages/home/home"
 import ErrorPage from "./pages/errorPage.js"
 import Login from "./pages/login/Login.jsx"
 import Register from "./pages/register/Register.jsx"
@@ -24,12 +24,13 @@ function App() {
         <Routes>
         {/* <Route path="/login" element={<Login/>}/> */}
         <Route path="/" element={<Home/>}/>
+        <Route path="/home" element={<Home/>}/>
         <Route path="/feed" element={<Feed/>}/>
         <Route path="*" element={<ErrorPage/>}/>
         <Route path="/login"
-        element={ user ? <Navigate to="/" /> : <Login /> }/>
+        element={ user ? <Navigate to="/home" /> : <Login /> }/>
         <Route path="/register" 
-        element={ user ? <Navigate to="/" /> : <Register/>}/>
+        element={ user ? <Navigate to="/home" /> : <Register/>}/>
         <Route path="/addEvent" element={<AddEvent/>}/>
         <Route path="/profile/:username" element={<Profile/>}/>
         <Route path="/post/:id" element={<PostPage/>}/>

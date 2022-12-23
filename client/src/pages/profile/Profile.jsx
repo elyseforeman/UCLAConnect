@@ -28,6 +28,9 @@ import Box from '@mui/material/Box';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 import Typography from '@mui/material/Typography';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import LogoutIcon from '@mui/icons-material/Logout';
+import {logoutCall} from "../../services/loginCall";
+
 export default function Profile() {
   const Navigate = useNavigate();
   const [profileUser, setProfileUser] = useState({});
@@ -41,6 +44,11 @@ export default function Profile() {
   const username = useParams(false).username;
   const {user, dispatch} = useContext(AuthContext);
   
+  const handleLogout= (e)=>{
+    e.preventDefault();
+    logoutCall(dispatch);
+    Navigate("/");
+  };
   // BUTTON TOGGLES
     const handleSwap = () => {
       setSwapFeed(swapFeed ? false : true);
@@ -137,12 +145,29 @@ export default function Profile() {
       }
     } else {
       return ( 
-      <Button 
-        variant="outlined" 
-        startIcon={<EditIcon />} 
-        onClick={handleEditButton}>
-        Edit Profile
-      </Button>
+        <>
+        <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'left',
+              minWidth: '150px',
+              maxHeight: '200px',          
+            }}>
+        <Button 
+          variant="outlined" 
+          startIcon={<EditIcon />} 
+          onClick={handleEditButton}>
+          Edit Profile
+        </Button>
+        <Button 
+          variant="outlined" 
+          startIcon={<LogoutIcon />} 
+          onClick={handleLogout}>
+          Log Out
+        </Button>
+        </Box>
+        </>
       )
     }
   }
@@ -164,54 +189,60 @@ export default function Profile() {
       <NavBar />
         <div className="profile">
             <div className="profileTop">
-            <div className="profileCover">
-                <img
-                  className="profileCoverImg"
-                  src={profileUser.coverPicture  ? profileUser.coverPicture : require('./images/clouds-default.jpeg')}
-                  alt="Cover"
-                />
+              <div className="profileCover">
+                  <img
+                    className="profileCoverImg"
+                    src={profileUser.coverPicture  ? profileUser.coverPicture : require('./images/clouds-default.jpeg')}
+                    alt="Cover"
+                  />
+              </div>
+              <div>
+              <Box classname="profileInfoBox"
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    m: 0,
+                    minWidth: '1000px',
+                    maxHeight: '500px',
+                    borderBottom: 2, 
+                    borderColor: 'gold',
+                    fontSize: 40,
+                    mt: 1,
+                  }}>
                 <img
                   className="profileUserImg"
                   src={profileUser.profilePicture ? profileUser.profilePicture : require('./images/default-bruin.webp')}
                   alt="Icon"
                 />
+                {profileUser.username}
+                {isOrganization && <HowToRegIcon/>}
+              <Box component="span" sx={{ fontSize: 24 }}>
+                    {profileUser.description}
+              </Box>
+              <FollowButton following={isFollowing} requested={isRequested} ownprofile={isOwnProfile}/>
+              </Box>
+
               </div>
             </div>
-            <Box classname="profileInfoBox"
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    m: 0,
-                    minWidth: { md: 300 },
-                    maxHeight: '200px',
-                    borderBottom: 2, 
-                    borderColor: 'gold',
-                  }}
-                  >
-                  <Box component="span" sx={{ fontSize: 40, mt: 1, display:'flex', flexDirection:'row'}}>
-                    {profileUser.username}
-                    {isOrganization &&
-                        <HowToRegIcon/>}
-                    </Box>
-                  <Box component="span" sx={{ fontSize: 24 }}>
-                    {profileUser.description}
 
-                  </Box>
-                  <Box sx={{display:'flex', flexDirection:'row', alignItems:"" }}>
-                  <FollowButton following={isFollowing} requested={isRequested} ownprofile={isOwnProfile}/>
-                  <FollowRequests/>
-                  {isOwnProfile && displayRequests && 
-                    <AvatarGroup total={user.followRequests.length}>
-                      {user.followRequests.map((request) => (
-                          <Link to={`/profile/${request}`}>
-                            <Avatar sx={{ bgcolor: '#064270' }}>{request.charAt(0)}</Avatar>
-                          </Link> 
-                        ))
+
+
+            <div className="profileBottom">
+              <Box sx={{display:'flex', flexDirection:'row', alignItems:"center" }}>
+                      <FollowRequests/>
+                      {isOwnProfile && displayRequests && 
+                        <AvatarGroup total={user.followRequests.length}>
+                          {user.followRequests.map((request) => (
+                              <Link to={`/profile/${request}`}>
+                                <Avatar sx={{ bgcolor: '#064270' }}>{request.charAt(0)}</Avatar>
+                              </Link> 
+                            ))
+                          }
+                        </AvatarGroup>
                       }
-                    </AvatarGroup>
-                  }
-                  </Box>
+              </Box>
+              <Box>
                    {/* {user.followRequests.includes(username) &&
                   <Button 
                     onClick={() => handleFollowRequest(user.username, profileUser.username, accept)}>
@@ -220,14 +251,18 @@ export default function Profile() {
                   </Button>
                   }
                  */}
-              {!swapFeed && <Button onClick={handleSwap}>See RSVPs</Button>}
-              {swapFeed && <Button onClick={handleSwap}>Return to Posts</Button>}   
-            </Box>
-            {user && edit && <EditProfileButton> </EditProfileButton>}
-            {!edit && 
-            <Box className="posts" sx={{display: 'flex', flexDirection: 'row'}}>
-                {swapFeed ? <RSVPFeed username={username}/> : <ProfileFeed username={username}/>}
-            </Box>}
+                  {!swapFeed && <Button onClick={handleSwap}>See RSVPs</Button>}
+                  {swapFeed && <Button onClick={handleSwap}>Return to Posts</Button>}   
+                </Box>
+                {user && edit && <EditProfileButton> </EditProfileButton>}
+                {!edit && 
+                <Box className="posts" sx={{display: 'flex', flexDirection: 'row'}}>
+                    {swapFeed ? <RSVPFeed username={username}/> : <ProfileFeed username={username}/>}
+              </Box>}
+            </div>
+
+
+
           </div>
         </div>
     );

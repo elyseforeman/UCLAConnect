@@ -24,7 +24,7 @@ export default function Login() {
 
     return (
         <div className="login">
-            <Button className="loginLogoBox" href="/">ConnectUCLA</Button>
+            <Button className="loginLogoBox" href="/home">ConnectUCLA</Button>
             <form className="loginBox" onSubmit={handleLogin}>
                 <input 
                     className="loginInput" 
