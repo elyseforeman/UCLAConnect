@@ -10,6 +10,12 @@ import Button from '@mui/material/Button';
 import CottageOutlinedIcon from '@mui/icons-material/CottageOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import Switch from '@mui/material/Switch'
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { useFormControl } from '@mui/material/FormControl';
+
 const AddEvent = () => {
     const navigate = useNavigate()
     const [title, setTitle]=useState('')
@@ -22,7 +28,8 @@ const AddEvent = () => {
     const [tags, setTags] = useState([]);
     const {user} = useContext(AuthContext);
     console.log(user._id)
-    const handleSubmit = (e) => {
+
+            const handleSubmit = (e) => {
         e.preventDefault()
         //post object MUST CORRESPOND TO POST SCHEMA and be json object
         const event= {
@@ -44,79 +51,49 @@ const AddEvent = () => {
         .catch(error => console.log(error));
     }
 
+    // OPEN AND CLOSE THE END DATE AND TIME
+    const [checked, setChecked] = React.useState(false);
+    const handleChange = () => {
+        setChecked(checked ? false : true);
+    };
+
     return (
-        <div className="createPostPage">
-            <div className="cpContainer">
-            <Button variant="outlined" href="/" color="inherit"startIcon={<CottageOutlinedIcon />}>Return to Home</Button>
-            <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    borderBottom: 2, 
-                    borderColor: 'gold',
-                    marginTop: 3,
-            }}><CalendarMonthOutlinedIcon/><h2>Post an Event</h2></Box>
+        <div>
+            <Box className="cpContainer">
+            <h2>Create New Event</h2>
 
             <form onSubmit={handleSubmit}>
-            <div className="inputGp">
-            <label>Event Name</label>
-                <input type="text"
-                value={title}
-                onChange={(e)=> setTitle(e.target.value)}
-                required/>
-            </div>
-            <div className="inputGp">
-            <label>Organizer</label>
-                <input type="text"
-                value={organizer}
-                onChange={(e)=> setOrganizer(e.target.value)}
-                required/>
-            </div>
-            <div className="inputGp">
-            <label>Start Time</label>
-                <input type="datetime-local"
-                value={startTime}
-                onChange={(e)=> setstartTime(e.target.value)}
-                required/>
-            </div>
-            <div className="inputGp">
-            <label>End Time</label>
-                <input type="datetime-local"
-                value={endTime}
-                onChange={(e)=> setendTime(e.target.value)}
-                required/>
-            </div>
-            <div className="inputGp">
-            <label>Details</label>
-                <textarea
-                value={details}
-                onChange={(e)=> setDetails(e.target.value)}
-                required>
-                </textarea>
-            </div>
-            <div className="inputGp">
-            <label>Location</label>
-                <textarea
-                value={location}
-                onChange={(e)=> setLocation(e.target.value)}
-                required>
-                </textarea>
-            </div>
-            <div className="inputGp">
-            <label>Poster URL</label>
-                <input type="url"
-                value={url}
-                onChange={(e)=> setUrl(e.target.value)}
-                required/>
-            </div>            
+            <TextField fullWidth margin="normal" id="outlined-basic" label="Event Name" variant="outlined" placeholder="ex. Winter Bake Sale" 
+            value={title} onChange={(e)=> setTitle(e.target.value)} required/>
+
+            <TextField fullWidth margin="normal" id="outlined-basic" label="Organizer Name" variant="outlined" placeholder="ex. Bruin Baking Club" 
+            value={organizer} onChange={(e)=> setOrganizer(e.target.value)} required/>
+
+            <TextField fullWidth margin="normal" id="outlined-basic" label="Start Date and Time" variant="outlined" InputLabelProps={{shrink: true,}} 
+            value={startTime} onChange={(e)=> setstartTime(e.target.value)} type="datetime-local" required/>
+
+            <FormControlLabel control={<Switch size="small" checked={checked} onChange={handleChange} 
+            inputProps={{ 'aria-label': 'controlled' }}/>} label="End Date and Time" />
+            
+            {checked && 
+            <TextField fullWidth margin="normal" id="outlined-basic" label="End Date and Time" variant="outlined" InputLabelProps={{shrink: true,}} 
+            value={endTime} onChange={(e)=> setendTime(e.target.value)} type="datetime-local"/>}
+            
+            <TextField fullWidth margin="normal" id="outlined-basic" label="What are the details?" 
+            variant="outlined" placeholder="ex. Join us on BruinWalk to buy or sell our home made baked goods!" multiline rows={3}
+            value={details} onChange={(e)=> setDetails(e.target.value)} required/>
+
+            <TextField fullWidth margin="normal" id="outlined-basic" label="Cover Picture URL" variant="outlined"
+            value={url} onChange={(e)=> setUrl(e.target.value)} type="url" required/>
+
             <div className="inputGp">
             <label>Add Tags</label>
                 <TagsInput tags={tags} setTags={setTags}/>
             </div>
-            <button className="submitButton" color="white">Post Event</button>
+            <Button variant="outlined">Post Event</Button>
             </form>
             
-            </div>
+            </Box>
         </div>
     );
 }
